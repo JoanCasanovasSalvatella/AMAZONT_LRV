@@ -22,25 +22,26 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 //RUTAS SOBRE LOS USUSARIOS
-Route::get('/userAll', [UserController::class, 'mostrarUser']);
-Route::get('/userOnly/{id}', [UserController::class, 'mostrarUnSoloUser']);
-Route::post('/userCreate', [UserController::class, 'crearUser']);
-Route::put('/userModify/{id}', [UserController::class, 'modificarUser']);
-Route::patch('/userModifyCamp/{id}', [UserController::class, 'modificarCampoUser']);
-Route::delete('/userDelete/{id}', [UserController::class, 'eliminarUser']);
+Route::get('/user/All', [UserController::class, 'mostrarUser']);
+Route::get('/user/Only/{id}', [UserController::class, 'mostrarUnSoloUser']);
+Route::post('/user/Create', [UserController::class, 'crearUser']);
+Route::post('/user/Login', [UserController::class, 'loginUser']);
+Route::put('/user/Modify/{id}', [UserController::class, 'modificarUser']);
+Route::patch('/user/ModifyCamp/{id}', [UserController::class, 'modificarCampoUser']);
+Route::delete('/user/Delete/{id}', [UserController::class, 'eliminarUser']);
 
 //RUTAS SOBRE LAS CATEGORIAS
-Route::get('/categoryAll', [UserController::class, 'mostrarCategory']);
-Route::get('/categoryOnly/{id}', [UserController::class, 'mostrarUnSoloCategory']);
-Route::post('/categoryCreate', [UserController::class, 'crearCategory']);
-Route::put('/categoryModify/{id}', [UserController::class, 'modificarCategory']);
-Route::patch('/categoryModifyCamp/{id}', [UserController::class, 'modificarCampoCategory']);
-Route::delete('/categoryDelete/{id}', [UserController::class, 'eliminarCategory']);
+Route::get('/category/All', [CategoriaController::class, 'mostrarCategory']);
+Route::get('/category/Only/{id}', [CategoriaController::class, 'mostrarUnSoloCategory']);
+Route::post('/category/Create', [CategoriaController::class, 'crearCategory']);
+Route::put('/category/Modify/{id}', [CategoriaController::class, 'modificarCategory']);
+Route::patch('/category/ModifyCamp/{id}', [CategoriaController::class, 'modificarCampoCategory']);
+Route::delete('/category/Delete/{id}', [CategoriaController::class, 'eliminarCategory']);
 
 //RUTAS SOBRE LAS CATEGORIAS
-Route::get('/productAll', [UserController::class, 'mostrarProduct']);
-Route::get('/productOnly/{id}', [UserController::class, 'mostrarUnSoloProduct']);
-Route::post('/productCreate', [UserController::class, 'crearProduct']);
-Route::put('/productModify/{id}', [UserController::class, 'modificarProduct']);
-Route::patch('/productModifyCamp/{id}', [UserController::class, 'modificarCampoProduct']);
-Route::delete('/productDelete/{id}', [UserController::class, 'eliminarProduct']);
+Route::get('/product/All', [ProductoController::class, 'mostrarProduct']);
+Route::get('/product/Only/{id}', [ProductoController::class, 'mostrarUnSoloProduct']);
+Route::post('/product/Create', [ProductoController::class, 'crearProduct']);
+Route::put('/product/Modify/{id}', [ProductoController::class, 'modificarProduct']);
+Route::patch('/product/ModifyCamp/{id}', [ProductoController::class, 'modificarCampoProduct']);
+Route::delete('/product/Delete/{id}', [ProductoController::class, 'eliminarProduct']);
