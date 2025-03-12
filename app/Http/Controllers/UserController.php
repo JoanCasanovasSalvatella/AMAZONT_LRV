@@ -124,18 +124,17 @@ class UserController extends Controller
         }
 
         // Si todo es correcto, generar el token de acceso (si usas API Token o JWT)
-        $token = $user->createToken('AppToken')->plainTextToken;
+        // $token = $user->createToken('AppToken')->plainTextToken;
 
         $data = [
             'message' => 'Login exitoso',
             'user' => $user,
-            'token' => $token,
+            // 'token' => $token,
             'status' => 200
         ];
 
         return response()->json($data, 200);
     }
-
 
     public function modificarUser(Request $request, $id) {
         $user = User::find($id);
