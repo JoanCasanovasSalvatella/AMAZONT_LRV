@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\CodigoRecuperacionMail;
 
 class UserController extends Controller
 {
@@ -48,7 +50,7 @@ class UserController extends Controller
         return response()->json($data, 200);
     }
 
-    public function verificarCorreo(Request $request) {
+    public function verificarEmail(Request $request) {
         $validator = Validator::make($request->all(), [
             'email' => 'required'
         ]);
@@ -56,7 +58,7 @@ class UserController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if ($user) {
-            return response()->json(null, 200); // Correo EXISTE
+            return response()->json(['message' => 'Correo encontrado'], 200); // Correo EXISTE
         }
 
         return response()->json(['error' => 'Correo no encontrado'], 404);
@@ -152,7 +154,7 @@ class UserController extends Controller
     }
 
     public function enviarCode(Request $request) {
-        $request->validate(['email' => 'required|email']);
+        $request->validate(['email' => 'required']);
 
         $user = User::where('email', $request->email)->first();
 
@@ -167,19 +169,19 @@ class UserController extends Controller
         // Enviar el código por correo electrónico
         Mail::to($user->email)->send(new CodigoRecuperacionMail($codigo));
 
-        return response()->json(['message' => 'Código enviado al correo electrónico'], 200);
+        return response()->json(['message' => 'Código enviado al correo electrónico']);
     }
 
     public function verificarCode(Request $request) {
         $request->validate([
-            'email' => 'required|email',
-            'codigo' => 'required|integer'
+            'email' => 'required',
+            'code' => 'required'
         ]);
 
         $user = User::where('email', $request->email)->first();
 
         // Verificar que el código sea correcto y no haya expirado
-        if ($user->recovery_code != $request->codigo || $user->code_expires_at < now()) {
+        if ($user->recovery_code != $request->code || $user->code_expires_at < now()) {
             return response()->json(['error' => 'Código inválido o expirado'], 400);
         }
 
@@ -316,8 +318,8 @@ class UserController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => 'max:255',
-            'email' => 'email|unique:users',
-            'password' => 'min:8',
+            'email' => 'unique:users,email,' . $id,
+            'password' => 'max:255',
             'rol' => 'max:255'
         ]);
 
