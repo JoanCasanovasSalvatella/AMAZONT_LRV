@@ -52,8 +52,12 @@ class UserController extends Controller
 
     public function verificarEmail(Request $request) {
         $validator = Validator::make($request->all(), [
-            'email' => 'required'
+            'email' => 'required|email' // Validar formato de email
         ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422); // Código 422 para validaciones
+        }
 
         $user = User::where('email', $request->email)->first();
 
