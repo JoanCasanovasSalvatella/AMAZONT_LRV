@@ -55,7 +55,9 @@ class ProductoController extends Controller
             'descripcion' => 'required',
             'precio' => 'required|numeric',
             'precioAnterior' => 'required|numeric',
-            'cat_id' => 'required|exists:categorias,id'
+            'cantidad' => 'required|integer|min:1',
+            'cat_id' => 'required|exists:categorias,id',
+            'user_id' => 'exists:users,id'
         ]);
 
         if ($validator->fails()) {
@@ -103,7 +105,9 @@ class ProductoController extends Controller
             'descripcion' => 'required',
             'precio' => 'required|numeric',
             'precioAnterior' => 'required|numeric',
-            'cat_id' => 'required|exists:categorias,id'
+            'cantidad' => 'required|integer|min:1',
+            'cat_id' => 'required|exists:categorias,id',
+            'user_id' => 'exists:users,id'
         ]);
 
         if ($validator->fails()) {
@@ -121,7 +125,9 @@ class ProductoController extends Controller
         $producto->descripcion = $request->descripcion;
         $producto->precio = $request->precio;
         $producto->precioAnterior = $request->precioAnterior;
+        $producto->cantidad = $request->cantidad;
         $producto->cat_id = $request->cat_id;
+        $producto->user_id = $request->user_id;
         $producto->save();
 
         $data = [
@@ -151,7 +157,9 @@ class ProductoController extends Controller
             'descripcion' => 'string',
             'precio' => 'numeric',
             'precioAnterior' => 'numeric',
-            'cat_id' => 'exists:categorias,id'
+            'cantidad' => 'integer|min:1',
+            'cat_id' => 'exists:categorias,id',
+            'user_id' => 'required|exists:users,id'
         ]);
 
         if ($validator->fails()) {
@@ -187,8 +195,16 @@ class ProductoController extends Controller
             $producto->precioAnterior = $request->precioAnterior;
         }
 
+        if ($request->has('cantidad')) {
+            $producto->cantidad = $request->cantidad;
+        }
+
         if ($request->has('cat_id')) {
             $producto->cat_id = $request->cat_id;
+        }
+
+        if ($request->has('user_id')) {
+            $producto->user_id = $request->user_id;
         }
 
         $producto->save();

@@ -19,8 +19,11 @@ return new class extends Migration
             $table->longText('descripcion');
             $table->double('precio', 8, 2);
             $table->double('precioAnterior', 8, 2);
+            $table->integer('cantidad');
             $table->unsignedBigInteger('cat_id');
             $table->foreign('cat_id')->references('id')->on('categorias')->onDelete('cascade');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

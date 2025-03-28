@@ -9,6 +9,9 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Opinion;
 use App\Models\Valoracion;
+use App\Models\Producto;
+use App\Models\Carrito;
+use App\Models\Compra;
 
 class User extends Authenticatable
 {
@@ -49,6 +52,11 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function productos()
+    {
+        return $this->hasMany(Producto::class, 'user_id');
+    }
+
     // Relación con el modelo Opinion
     public function opiniones()
     {
@@ -59,5 +67,15 @@ class User extends Authenticatable
     public function valoraciones()
     {
         return $this->hasMany(Valoracion::class, 'user_id');
+    }
+
+    public function carritos()
+    {
+        return $this->hasMany(Carrito::class, 'user_id');
+    }
+
+    public function compras()
+    {
+        return $this->hasMany(Compra::class, 'user_id');
     }
 }
