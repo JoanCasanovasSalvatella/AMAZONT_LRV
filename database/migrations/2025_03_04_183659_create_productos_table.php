@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nombre');
             $table->boolean('oferta');
-            $table->string('imagen');
+            $table->text('imagen');
             $table->longText('descripcion');
             $table->double('precio', 8, 2);
             $table->double('precioAnterior', 8, 2);

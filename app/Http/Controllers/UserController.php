@@ -52,7 +52,7 @@ class UserController extends Controller
 
     public function verificarEmail(Request $request) {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email' // Validar formato de email
+            'email' => 'required|email|string|max:255|exists:users,email'
         ]);
 
         if ($validator->fails()) {
@@ -70,10 +70,10 @@ class UserController extends Controller
 
     public function crearUser(Request $request) {
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|unique:users,email',
-            'password' => 'required',
-            'rol' => 'required'
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|string|max:255|unique:users,email',
+            'password' => ['required','string','min:8','max:16','regex:/[a-zA-Z]/','regex:/[0-9]/','regex:/[\W]/'],
+            'rol' => 'required|string|in:Cliente,Vendedor'
         ]);
 
         if ($validator->fails()) {
@@ -111,8 +111,8 @@ class UserController extends Controller
     public function loginUser(Request $request) {
         // Validar que los campos email y password estén presentes
         $validator = Validator::make($request->all(), [
-            'email' => 'required',
-            'password' => 'required'
+            'email' => 'required|email|string|max:255|exists:users,email',
+            'password' => ['required','string','min:8','max:16','regex:/[a-zA-Z]/','regex:/[0-9]/','regex:/[\W]/'],
         ]);
 
         if ($validator->fails()) {
@@ -158,9 +158,17 @@ class UserController extends Controller
     }
 
     public function enviarCode(Request $request) {
-        $request->validate(['email' => 'required']);
+        $request->validate(['email' => 'required|email|string|max:255|exists:users,email']);
 
         $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            $data = [
+                'message' => 'Correo electrónico no encontrado',
+                'status' => 404
+            ];
+            return response()->json($data, 404);
+        }
 
         // Generar un código aleatorio de 5 dígitos
         $codigo = random_int(10000, 99999);
@@ -178,11 +186,19 @@ class UserController extends Controller
 
     public function verificarCode(Request $request) {
         $request->validate([
-            'email' => 'required',
+            'email' => 'required|email|string|max:255|exists:users,email',
             'code' => 'required'
         ]);
 
         $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            $data = [
+                'message' => 'Correo electrónico no encontrado',
+                'status' => 404
+            ];
+            return response()->json($data, 404);
+        }
 
         // Verificar que el código sea correcto y no haya expirado
         if ($user->recovery_code != $request->code || $user->code_expires_at < now()) {
@@ -200,12 +216,20 @@ class UserController extends Controller
     public function verificarPassword(Request $request) {
         // Validar que los campos email y password estén presentes
         $validator = Validator::make($request->all(), [
-            'email' => 'required',
-            'password' => 'required'
+            'email' => 'required|email|string|max:255|exists:users,email',
+            'password' => ['required','string','min:8','max:16','regex:/[a-zA-Z]/','regex:/[0-9]/','regex:/[\W]/'],
         ]);
 
         // Verificar si el usuario existe
         $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            $data = [
+                'message' => 'Correo electrónico no encontrado',
+                'status' => 404
+            ];
+            return response()->json($data, 404);
+        }
 
         // Verificar que la contraseña sea correcta
         if (Hash::check($request->password, $user->password)) {
@@ -228,8 +252,8 @@ class UserController extends Controller
     public function cambiarPassword(Request $request) {
         // Validar que los campos email y password estén presentes
         $validator = Validator::make($request->all(), [
-            'email' => 'required',
-            'password' => 'required'
+            'email' => 'required|email|string|max:255|exists:users,email',
+            'password' => ['required','string','min:8','max:16','regex:/[a-zA-Z]/','regex:/[0-9]/','regex:/[\W]/'],
         ]);
 
         if ($validator->fails()) {
@@ -277,10 +301,11 @@ class UserController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|unique:users,email,' . $id,
-            'password' => 'required',
-            'rol' => 'required'
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|string|max:255|unique:users,email,' . $id,
+            'password' => ['required','string','max:16','regex:/[a-zA-Z]/','regex:/[0-9]/','regex:/[\W]/'],
+            'rol' => 'required|string|in:Cliente,Vendedor'
+
         ]);
 
         if ($validator->fails()) {
@@ -294,9 +319,7 @@ class UserController extends Controller
 
         $user->name = $request->name;
         $user->email = $request->email;
-        if ($request->filled('password')) {
-            $user->password = bcrypt($request->password);
-        }
+        $user->password = bcrypt($request->password);
         $user->rol = $request->rol;
         $user->save();
 
@@ -321,10 +344,11 @@ class UserController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'name' => 'max:255',
-            'email' => 'unique:users,email,' . $id,
-            'password' => 'max:255',
-            'rol' => 'max:255'
+            'name' => 'string|max:255',
+            'email' => 'email|string|max:255|unique:users,email,' . $id,
+            'adress' => 'string',
+            'password' => ['string','min:8','max:16','regex:/[a-zA-Z]/','regex:/[0-9]/','regex:/[\W]/'],
+            'rol' => 'string|in:Cliente,Vendedor'
         ]);
 
         if ($validator->fails()) {
@@ -342,6 +366,10 @@ class UserController extends Controller
 
         if ($request->has('email')) {
             $user->email = $request->email;
+        }
+
+        if ($request->has('adress')) {
+            $user->adress = $request->adress;
         }
 
         if ($request->has('password')) {

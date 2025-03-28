@@ -49,12 +49,12 @@ class ProductoController extends Controller
 
     public function crearProduct(Request $request) {
         $validator = Validator::make($request->all(), [
-            'nombre' => 'required',
+            'nombre' => 'required|string|max:255',
             'oferta' => 'required',
             'imagen' => 'required',
             'descripcion' => 'required',
             'precio' => 'required|numeric',
-            'precioAnterior' => 'required',
+            'precioAnterior' => 'required|numeric',
             'cat_id' => 'required|exists:categorias,id'
         ]);
 
@@ -97,12 +97,12 @@ class ProductoController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'nombre' => 'required',
+            'nombre' => 'required|string|max:255',
             'oferta' => 'required',
             'imagen' => 'required',
             'descripcion' => 'required',
-            'precio' => 'required',
-            'precioAnterior' => 'required',
+            'precio' => 'required|numeric',
+            'precioAnterior' => 'required|numeric',
             'cat_id' => 'required|exists:categorias,id'
         ]);
 
@@ -145,10 +145,10 @@ class ProductoController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'nombre' => 'max:255',
+            'nombre' => 'string|max:255',
             'oferta' => 'boolean',
-            'imagen' => 'url',
-            'descripcion' => 'max:500',
+            'imagen' => 'string',
+            'descripcion' => 'string',
             'precio' => 'numeric',
             'precioAnterior' => 'numeric',
             'cat_id' => 'exists:categorias,id'

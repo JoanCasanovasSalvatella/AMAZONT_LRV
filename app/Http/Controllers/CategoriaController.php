@@ -49,7 +49,7 @@ class CategoriaController extends Controller
 
     public function crearCategory(Request $request) {
         $validator = Validator::make($request->all(), [
-            'nombre' => 'required',
+            'nombre' => 'required|string|max:255',
             'imagen' => 'required'
         ]);
 
@@ -95,7 +95,7 @@ class CategoriaController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'nombre' => 'required',
+            'nombre' => 'required|string|max:255',
             'imagen' => 'required'
         ]);
 
@@ -133,8 +133,8 @@ class CategoriaController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'nombre' => 'max:255',
-            'imagen' => 'url'
+            'nombre' => 'string|max:255',
+            'imagen' => 'string'
         ]);
 
         if ($validator->fails()) {

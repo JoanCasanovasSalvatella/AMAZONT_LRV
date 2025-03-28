@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Opinion;
+use App\Models\Valoracion;
 
 class User extends Authenticatable
 {
@@ -46,4 +48,16 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    // Relación con el modelo Opinion
+    public function opiniones()
+    {
+        return $this->hasMany(Opinion::class, 'user_id');
+    }
+
+    // Relación con el modelo Valoracion
+    public function valoraciones()
+    {
+        return $this->hasMany(Valoracion::class, 'user_id');
+    }
 }
