@@ -23,6 +23,7 @@ class productSeeder extends Seeder
             'precioAnterior' => rand(10, 100) . '.99',
             'cantidad' => rand(1, 100),
             'cat_id' => rand(1, 5),
+            'user_id' => 1,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -36,6 +37,7 @@ class productSeeder extends Seeder
             'precioAnterior' => rand(10, 100) . '.99',
             'cantidad' => rand(1, 100),
             'cat_id' => rand(1, 5),
+            'user_id' => 1,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -49,10 +51,9 @@ class productSeeder extends Seeder
             'precioAnterior' => rand(10, 100) . '.99',
             'cantidad' => rand(1, 100),
             'cat_id' => rand(1, 5),
+            'user_id' => 1,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-
-
     }
 }

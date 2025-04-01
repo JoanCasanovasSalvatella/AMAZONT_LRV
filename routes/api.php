@@ -7,6 +7,8 @@ use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\OpinionController;
 use App\Http\Controllers\ValoracionController;
+use App\Http\Controllers\CarritoController;
+use App\Http\Controllers\CompraController;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,3 +69,19 @@ Route::post('/product/Create', [ProductoController::class, 'crearProduct']);
 Route::put('/product/Modify/{id}', [ProductoController::class, 'modificarProduct']);
 Route::patch('/product/ModifyCamp/{id}', [ProductoController::class, 'modificarCampoProduct']);
 Route::delete('/product/Delete/{id}', [ProductoController::class, 'eliminarProduct']);
+Route::get('/product/ProdForCat', [ProductoController::class, 'productPorCategoria']);
+Route::get('/product/ProdForOnlyCat/{id}', [ProductoController::class, 'productPorUnaCategoria']);
+Route::get('/product/My/{id}', [ProductoController::class, 'miProduct']);
+
+//RUTAS SOBRE EL CARRITO
+Route::get('/cart/My/{id}', [CarritoController::class, 'mostrarCart']);
+Route::post('/cart/Add', [CarritoController::class, 'agregarCart']);
+Route::delete('/cart/Delete', [CarritoController::class, 'eliminarCart']);
+Route::get('/cart/Total/{id}', [CarritoController::class, 'totalCart']);
+Route::post('/cart/Confirm/{id}', [CarritoController::class, 'confirmarCompra']);
+
+//RUTAS SOBRE LAS COMPRAS
+Route::get('/shop/Buy/{id}', [CompraController::class, 'mostrarCompra']);
+Route::get('/shop/Sell/{id}', [CompraController::class, 'mostrarVentas']);
+Route::get('/shop/TotalBuy/{id}', [CompraController::class, 'totalCompra']);
+Route::get('/shop/TotalSell/{id}', [CompraController::class, 'totalVenta']);

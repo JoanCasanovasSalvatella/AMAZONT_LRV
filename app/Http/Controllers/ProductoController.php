@@ -238,4 +238,59 @@ class ProductoController extends Controller
 
         return response()->json($data, 200);
     }
+
+    public function productPorCategoria()
+    {
+        $categorias = Categoria::with('productos')->get();
+
+        if ($categorias->isEmpty()) {
+            return response()->json([
+                'message' => 'No se encontraron categorías con productos',
+                'status' => 404
+            ], 404);
+        }
+
+        return response()->json([
+            'categorias' => $categorias,
+            'status' => 200
+        ], 200);
+    }
+
+    public function productPorUnaCategoria($id)
+    {
+        $categoria = Categoria::with('productos')->find($id);
+
+        if (!$categoria) {
+            return response()->json([
+                'message' => 'Categoría no encontrada',
+                'status' => 404
+            ], 404);
+        }
+
+        return response()->json([
+            'categoria' => $categoria,
+            'status' => 200
+        ], 200);
+    }
+
+    public function miProduct($user_id)
+    {
+        $categorias = Categoria::whereHas('productos', function ($query) use ($user_id) {
+            $query->where('user_id', $user_id);
+        })->with(['productos' => function ($query) use ($user_id) {
+            $query->where('user_id', $user_id);
+        }])->get();
+
+        if ($categorias->isEmpty()) {
+            return response()->json([
+                'message' => 'No se encontraron productos para este usuario',
+                'status' => 404
+            ], 404);
+        }
+
+        return response()->json([
+            'categorias' => $categorias,
+            'status' => 200
+        ], 200);
+    }
 }
