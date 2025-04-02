@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Categoria;
 use App\Models\Producto;
 
 class ProductoController extends Controller
@@ -159,7 +160,7 @@ class ProductoController extends Controller
             'precioAnterior' => 'numeric',
             'cantidad' => 'integer|min:1',
             'cat_id' => 'exists:categorias,id',
-            'user_id' => 'required|exists:users,id'
+            'user_id' => 'exists:users,id'
         ]);
 
         if ($validator->fails()) {
@@ -252,6 +253,40 @@ class ProductoController extends Controller
 
         return response()->json([
             'categorias' => $categorias,
+            'status' => 200
+        ], 200);
+    }
+
+    public function productPorOferta()
+    {
+        $productos = Producto::where('oferta', true)->get();
+
+        if ($productos->isEmpty()) {
+            return response()->json([
+                'message' => 'No hay productos en oferta',
+                'status' => 404
+            ], 404);
+        }
+
+        return response()->json([
+            'productos' => $productos,
+            'status' => 200
+        ], 200);
+    }
+
+    public function productSinOferta()
+    {
+        $productos = Producto::where('oferta', false)->get();
+
+        if ($productos->isEmpty()) {
+            return response()->json([
+                'message' => 'No hay productos en oferta',
+                'status' => 404
+            ], 404);
+        }
+
+        return response()->json([
+            'productos' => $productos,
             'status' => 200
         ], 200);
     }

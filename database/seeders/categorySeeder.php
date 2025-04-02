@@ -15,25 +15,31 @@ class categorySeeder extends Seeder
     public function run(): void
     {
         DB::table('categorias')->insert([
-            'nombre' => Str::random(10),
-            'imagen' => rand(1, 10), // Puede ser un ID o una referencia de imagen
-            'created_at' => now(),
-            'updated_at' => now(),
+            [
+                'id' => 1,
+                'nombre' => 'Electrónica',
+                'imagen' => 'electronica.jpg',
+            ],
+            [
+                'id' => 2,
+                'nombre' => 'Hogar',
+                'imagen' => 'hogar.jpg',
+            ],
+            [
+                'id' => 3,
+                'nombre' => 'Ropa',
+                'imagen' => 'ropa.jpg',
+            ],
+            [
+                'id' => 4,
+                'nombre' => 'Deportes',
+                'imagen' => 'deportes.jpg',
+            ],
+            [
+                'id' => 5,
+                'nombre' => 'Juguetes',
+                'imagen' => 'juguetes.jpg',
+            ],
         ]);
-
-        DB::table('categorias')->insert([
-            'nombre' => Str::random(10),
-            'imagen' => rand(1, 10), // Puede ser un ID o una referencia de imagen
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-
-        DB::table('categorias')->insert([
-            'nombre' => Str::random(10),
-            'imagen' => rand(1, 10), // Puede ser un ID o una referencia de imagen
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-
     }
 }

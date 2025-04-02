@@ -18,7 +18,7 @@ return new class extends Migration
             $table->text('imagen');
             $table->longText('descripcion');
             $table->double('precio', 8, 2);
-            $table->double('precioAnterior', 8, 2);
+            $table->double('precioAnterior', 8, 2)->nullable();
             $table->integer('cantidad');
             $table->unsignedBigInteger('cat_id');
             $table->foreign('cat_id')->references('id')->on('categorias')->onDelete('cascade');

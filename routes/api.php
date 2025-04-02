@@ -47,12 +47,12 @@ Route::get('/opinion/ForProduct/{id}', [OpinionController::class, 'OpinionPorPro
 Route::get('/opinion/ForUser/{id}', [OpinionController::class, 'OpinionPorUsuario']);
 
 //RUTAS SOBRE LAS VALORACIONES
-Route::post('/review/Create', [ValoracionController::class, 'crearReview']);
+Route::post('/review/Create', [ValoracionController::class, 'crearValoracion']);
 Route::patch('/review/Update/{id}', [ValoracionController::class, 'actualizarValoracion']);
 Route::delete('/review/Delete/{id}', [ValoracionController::class, 'eliminarValoracion']);
-Route::get('/review/ForProduct/{id}', [CategoriaController::class, 'ValoracionesPorProducto']);
-Route::get('/review/ForUser/{id}', [CategoriaController::class, 'ValoracionesPorUsuario']);
-Route::get('/review/Average/{id}', [CategoriaController::class, 'promedioPuntuacionProducto']);
+Route::get('/review/ForProduct/{id}', [ValoracionController::class, 'ValoracionesPorProducto']);
+Route::get('/review/ForUser/{id}', [ValoracionController::class, 'ValoracionesPorUsuario']);
+Route::get('/review/Average/{id}', [ValoracionController::class, 'promedioPuntuacionProducto']);
 
 //RUTAS SOBRE LAS CATEGORIAS
 Route::get('/category/All', [CategoriaController::class, 'mostrarCategory']);
@@ -70,13 +70,15 @@ Route::put('/product/Modify/{id}', [ProductoController::class, 'modificarProduct
 Route::patch('/product/ModifyCamp/{id}', [ProductoController::class, 'modificarCampoProduct']);
 Route::delete('/product/Delete/{id}', [ProductoController::class, 'eliminarProduct']);
 Route::get('/product/ProdForCat', [ProductoController::class, 'productPorCategoria']);
+Route::get('/product/ProdSale', [ProductoController::class, 'productPorOferta']);
+Route::get('/product/ProdNotSale', [ProductoController::class, 'productSinOferta']);
 Route::get('/product/ProdForOnlyCat/{id}', [ProductoController::class, 'productPorUnaCategoria']);
 Route::get('/product/My/{id}', [ProductoController::class, 'miProduct']);
 
 //RUTAS SOBRE EL CARRITO
 Route::get('/cart/My/{id}', [CarritoController::class, 'mostrarCart']);
 Route::post('/cart/Add', [CarritoController::class, 'agregarCart']);
-Route::delete('/cart/Delete', [CarritoController::class, 'eliminarCart']);
+Route::delete('/cart/Delete/{id}', [CarritoController::class, 'eliminarCart']);
 Route::get('/cart/Total/{id}', [CarritoController::class, 'totalCart']);
 Route::post('/cart/Confirm/{id}', [CarritoController::class, 'confirmarCompra']);
 

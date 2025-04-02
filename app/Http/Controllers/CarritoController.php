@@ -31,13 +31,34 @@ class CarritoController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['message' => 'Error en la validación', 'errors' => $validator->errors(), 'status' => 400], 400);
+            return response()->json([
+                'message' => 'Error en la validación',
+                'errors' => $validator->errors(),
+                'status' => 400
+            ], 400);
         }
 
         $producto = Producto::find($request->prod_id);
+
+        // Verificar si hay suficiente stock
+        if ($producto->cantidad < $request->cantidad) {
+            return response()->json([
+                'message' => 'Stock insuficiente',
+                'status' => 400
+            ], 400);
+        }
+
         $carrito = Carrito::where('user_id', $request->user_id)->where('prod_id', $request->prod_id)->first();
 
         if ($carrito) {
+            // Verificar que la nueva cantidad no exceda el stock
+            if ($producto->cantidad < ($carrito->cantidad + $request->cantidad)) {
+                return response()->json([
+                    'message' => 'Stock insuficiente para actualizar la cantidad',
+                    'status' => 400
+                ], 400);
+            }
+
             $carrito->cantidad += $request->cantidad;
             $carrito->total = $carrito->cantidad * $producto->precio;
             $carrito->save();
@@ -51,14 +72,20 @@ class CarritoController extends Controller
             ]);
         }
 
-        return response()->json(['message' => 'Producto agregado al carrito', 'carrito' => $carrito, 'status' => 201], 201);
+        // Descontar el stock del producto
+        $producto->cantidad -= $request->cantidad;
+        $producto->save();
+
+        return response()->json([
+            'message' => 'Producto agregado al carrito',
+            'carrito' => $carrito,
+            'status' => 201
+        ], 201);
     }
 
-    public function eliminarCart(Request $request)
+    public function eliminarCart(Request $request, $carrito_id)
     {
         $validator = Validator::make($request->all(), [
-            'user_id' => 'required|exists:users,id',
-            'prod_id' => 'required|exists:productos,id',
             'cantidad' => 'required|integer|min:1'
         ]);
 
@@ -66,17 +93,28 @@ class CarritoController extends Controller
             return response()->json(['message' => 'Error en la validación', 'errors' => $validator->errors(), 'status' => 400], 400);
         }
 
-        $carrito = Carrito::where('user_id', $request->user_id)->where('prod_id', $request->prod_id)->first();
+        $carrito = Carrito::find($carrito_id);
 
         if (!$carrito) {
             return response()->json(['message' => 'Producto no encontrado en el carrito', 'status' => 404], 404);
+        }
+
+        $producto = Producto::find($carrito->prod_id);
+
+        if (!$producto) {
+            return response()->json(['message' => 'Producto no encontrado en la base de datos', 'status' => 404], 404);
         }
 
         if ($carrito->cantidad > $request->cantidad) {
             $carrito->cantidad -= $request->cantidad;
             $carrito->total = $carrito->cantidad * $carrito->precio_producto;
             $carrito->save();
+
+            $producto->cantidad += $request->cantidad;
+            $producto->save();
         } else {
+            $producto->cantidad += $carrito->cantidad;
+            $producto->save();
             $carrito->delete();
         }
 

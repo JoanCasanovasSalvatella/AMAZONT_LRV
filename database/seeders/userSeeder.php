@@ -16,31 +16,41 @@ class userSeeder extends Seeder
     public function run(): void
     {
         DB::table('users')->insert([
-            'name' => 'AMAZONT',
-            'email' => 'amazont@amazont.com',
-            'password' => Hash::make('admiin'),
-            'rol' => 'Administrador'
-        ]);
-        DB::table('users')->insert([
-            'name' => Str::random(10),
-            'email' => Str::random(10).'@example.com',
-            'adress' => Str::random(10),
-            'password' => Hash::make('password'),
-            'rol' => 'Vendedor'
-        ]);
-        DB::table('users')->insert([
-            'name' => Str::random(10),
-            'email' => Str::random(10).'@example.com',
-            'adress' => Str::random(10),
-            'password' => Hash::make('password'),
-            'rol' => 'Cliente'
-        ]);
-        DB::table('users')->insert([
-            'name' => Str::random(10),
-            'email' => Str::random(10).'@example.com',
-            'adress' => Str::random(10),
-            'password' => Hash::make('password'),
-            'rol' => 'Cliente'
+            [
+                'id' => 1,
+                'name' => 'AMAZONT',
+                'email' => 'amazont@amazont.com',
+                'password' => Hash::make('admiin'),
+                'rol' => 'Administrador',
+            ],
+            [
+                'id' => 2,
+                'name' => 'Juan Pérez',
+                'email' => 'juanperez@email.com',
+                'password' => Hash::make('cliente1'),
+                'rol' => 'Cliente',
+            ],
+            [
+                'id' => 3,
+                'name' => 'María López',
+                'email' => 'marialopez@email.com',
+                'password' => Hash::make('cliente1'),
+                'rol' => 'Cliente',
+            ],
+            [
+                'id' => 4,
+                'name' => 'Carlos Ramírez',
+                'email' => 'carlosramirez@email.com',
+                'password' => Hash::make('vendedor1'),
+                'rol' => 'Vendedor',
+            ],
+            [
+                'id' => 5,
+                'name' => 'Ana Torres',
+                'email' => 'anatorres@email.com',
+                'password' => Hash::make('vendedor1'),
+                'rol' => 'Vendedor',
+            ],
         ]);
     }
 }
