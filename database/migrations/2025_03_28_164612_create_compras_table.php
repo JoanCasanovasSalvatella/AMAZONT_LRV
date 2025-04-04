@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('compras', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id'); // Nueva columna para almacenar el id del usuario
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade'); // Establecemos la relación con la tabla usuarios
+            $table->unsignedBigInteger('user_id')->nullable(); // Nueva columna para almacenar el id del usuario
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null'); // Establecemos la relación con la tabla usuarios
             $table->unsignedBigInteger('prod_id');
             $table->foreign('prod_id')->references('id')->on('productos')->onDelete('cascade');
             $table->integer('cantidad');
